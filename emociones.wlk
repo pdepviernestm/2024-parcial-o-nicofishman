@@ -36,9 +36,13 @@ class Emocion {
     return self.tieneIntensidadElevada()
   }
 
+  method aplicarEfecto(evento)
+
   method liberarse(evento) {
+    eventosVividos.add(evento)
     if (self.puedeLiberarse()) {
       intensidad -= evento.impacto()
+      self.aplicarEfecto(evento)
     }
   }
 }
@@ -46,7 +50,7 @@ class Emocion {
 class Furia inherits Emocion(intensidad=100) {
   var property palabrotas = []
 
-  method agregarPalabrota(palabrota) {
+  method aprenderPalabrota(palabrota) {
     palabrotas.add(palabrota)
   }
 
@@ -54,19 +58,17 @@ class Furia inherits Emocion(intensidad=100) {
     return super() && palabrotas.any({p => p.size() > 7})
   }
 
-  override method liberarse(evento) {
-    super(evento)
+  override method aplicarEfecto(evento) {
     palabrotas = palabrotas.drop(1)
   }
 }
 
 class Alegria inherits Emocion {
   override method puedeLiberarse() {
-    return super() && eventosVividos.size() % 2 == 0
+    return super() && eventosVividos.size().even()
   }
 
-  override method liberarse(evento) {
-    super(evento)
+  override method aplicarEfecto(evento) {
     if (intensidad < 0) {
       intensidad = intensidad * -1
     }
@@ -76,12 +78,12 @@ class Alegria inherits Emocion {
 class Tristeza inherits Emocion {
   var property causa = "melancolía"
 
+  // Solo puede liberarse si la causa no es melancolía, pero para cambiar la causa debe haberse liberado y la causa inicial es melancolía. Hay algo raro en el enunciado.
   override method puedeLiberarse() {
     return super() && causa != "melancolía"
   }
 
-  override method liberarse(evento) {
-    super(evento)
+  override method aplicarEfecto(evento) {
     causa = evento.descripcion()
   } 
 }
@@ -92,9 +94,19 @@ class EmocionGenerica inherits Emocion {
   }
 }
 
-class Desagrado inherits EmocionGenerica {}
+class Desagrado inherits EmocionGenerica {
+  override method aplicarEfecto(evento) {
+    // No hace falta hacer nada, simplemente pongo el método para que no me tome como abstracta la clase :)
+    // Acá pongo un comentario importante: Arranca por la derecha el genio del fútbol mundial...
+  }
+}
 
-class Temor inherits EmocionGenerica {} 
+class Temor inherits EmocionGenerica {
+  override method aplicarEfecto(evento) {
+    // No hace falta hacer nada, simplemente pongo el método para que no me tome como abstracta la clase :)
+    // Acá pongo un comentario importante: Ella durmió al calor de las masas, y yo desperté...
+  }
+} 
 
 // NUEVA EMOCION: Ansiedad!
 
@@ -103,8 +115,7 @@ class Ansiedad inherits Emocion {
     return super() && eventosVividos.size() > 0
   }
 
-  override method liberarse(evento) {
-    super(evento)
+  override method aplicarEfecto(evento) {
     intensidad = 0
   }
 }

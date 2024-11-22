@@ -1,7 +1,5 @@
 import emociones.*
 
-// El objetivo es modelar algunos aspectos de las personas, sus emociones y los eventos que viven.
-
 /*
 - Averiguar si una persona es adolescente. Los expertos en las emociones informan que la etapa de adolescencia arranca con 12 años y termina cuando cumple 19.
 - Hacer que una persona tenga una nueva emoción.
