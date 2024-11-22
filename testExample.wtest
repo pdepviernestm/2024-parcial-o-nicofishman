@@ -1,9 +1,61 @@
-import example.pepita
+import example.*
+import emociones.*
+import evento.*
 
-describe "group of tests for pepita" {
-
-  test "pepita has initial energy" {
-    assert.equals(100, pepita.energy())
+describe "Test punto 6" {
+  test "Crear grupo de personas con emociones y hacerlos vivir un evento" {
+    const persona1 = new Persona(edad = 15)
+    const alegria = new Alegria(intensidad = 150)
+    const tristeza = new Tristeza(intensidad = 100)
+    persona1.agregarEmocion(alegria)
+    persona1.agregarEmocion(tristeza)
+    
+    const persona2 = new Persona(edad = 20)
+    const furia = new Furia(intensidad = 400)
+    furia.aprenderPalabrota("malparido")
+    furia.aprenderPalabrota("hijo de puta")
+    
+    persona2.agregarEmocion(furia)
+    
+    const persona3 = new Persona(edad = 10)
+    const desagrado = new Desagrado(intensidad = 20)
+    const ansiedad = new Ansiedad(intensidad = 50)
+    persona3.agregarEmocion(desagrado)
+    
+    const grupo = new GrupoDePersonas(personas = [persona1, persona2, persona3])
+    
+    const evento1 = new Evento(
+      impacto = 50,
+      descripcion = "Argentina campeón del mundial"
+    )
+    
+    const evento2 = new Evento(
+      impacto = 500,
+      descripcion = "Argentina eliminada en fase de grupos"
+    )
+    
+    grupo.vivirEvento(evento1)
+    
+    // No se puede liberar porque la cantidad de eventos vividos es impar (1)
+    assert.equals(alegria.intensidad(), 150) // 150 - 0 = 150
+    
+    // No puede liberarse porque la causa es "melancolía"
+    assert.equals(tristeza.intensidad(), 100) // 100 - 0 = 100 
+    
+    assert.equals(furia.intensidad(), 350) // 400 - 50 = 350
+    
+    assert.equals(furia.palabrotas().size(), 1) // "malparido" fue eliminado
+    
+    // No tiene más eventos vividos que su intensidad
+    assert.equals(desagrado.intensidad(), 20) // 20 - 0 = 20 
+    
+    // No se libera porque la intensidad es menor al valor mínimo
+    assert.equals(ansiedad.intensidad(), 50) // 50 - 0 = 50
+    
+    grupo.vivirEvento(evento2) 
+    
+    // Ya se liberó la emoción porque la cantidad de eventos vividos es par (2)
+    // Como la intensidad es negativa, se le da el mismo valor pero positivo
+    assert.equals(alegria.intensidad(), 350) // 150 - 500 = -350 * (-1) = 350
   }
-
 }
