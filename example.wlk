@@ -14,7 +14,7 @@ class Persona {
   var property emociones = []
 
   method esAdolescente() {
-    return edad >= 12 && edad <= 19
+    return edad >= 12 && edad < 19
   }
 
   method agregarEmocion(emocion) {
